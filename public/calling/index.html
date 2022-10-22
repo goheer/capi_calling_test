@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="description" content="CAPI Calling WebRTC Test App">
+    <meta name="viewport" content="width=device-width, user-scalable=yes, initial-scale=1, maximum-scale=1">
+    <meta itemprop="description" content="Client-side WebRTC Test App">
+    <meta itemprop="name" content="CAPI Calling WebRTC Test App">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta id="theme-color" name="theme-color" content="#ffffff">
+
+    <base target="_blank">
+
+    <title>CAPI Calling WebRTC Test App</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="css/main.css" />
+
+</head>
+
+<body>
+
+    <div id="container">
+
+        <h1 id="title">CAPI Calling WebRTC Test App</h1>
+
+        <div id="inputs">
+            <div class="input-box">
+                <div class="label">Server:</div>
+                <input id="serverNameData" value="graph.facebook.com"></input>
+                <div style="font-size:small">You can override this to point to an internal server:
+                    graph.devvm379.eag0.facebook.com</div>
+            </div>
+            <div class="input-box">
+                <div class="label">Phone Number ID:</div>
+                <input id="phoneNumberData" value=""></input>
+                <div style="font-size:small">Phone number ID from from your App.</div>
+            </div>
+            <div class="input-box">
+                <div class="label">Access Token:</div>
+                <input id="accessTokenData" value=""></input>
+                <div style="font-size:small">Access token from your App.</div>
+            </div>
+        </div>
+        <div id="inputsC">
+            <div class="input-box">
+                <div class="label">Callee:</div>
+                <input id="calleeData" value=""></input>
+                <div style="font-size:small">Phone number from your App.</div>
+            </div>
+            <div class="input-box">
+                <div class="label">Call ID:</div>
+                <input id="callIdData" value="" readonly></input>
+                <div style="font-size:small">This is the Call ID of the current call.</div>
+            </div>
+        </div>
+
+        <div class="connectionStatusDiv">
+            <h2 class="connectionStatus">Connection Status: </h2>
+            <h2 class="connectionStatus" id="connectionStatusText">-</h2>
+        </div>
+
+        <div id="micControls">
+            <label for="muteMic">Mute Microphone</label>
+            <input type="checkbox" id="muteMic" value="Mute Mic" />
+        </div>
+
+
+        <div id="buttons">
+            <button id="makeCallButton">Call</button>
+            <button id="acceptIncomingCallButton">Accept Incoming Calls</button>
+            <button id="hangupButton">Hang up</button>
+        </div>
+
+        <button type="button" class="collapsible">Show/Hide Details</button>
+        <div class="content">
+
+            <div id="inputs">
+                <div id="connectionConfiguration" class="input-box">
+                    <div class="label">Connection Configuration:</div>
+                    <textarea id="connectionConfigurationData"></textarea>
+                </div>
+                <div id="serverIceOffer" class="input-box">
+                    <div class="label">Server ICE Offer:</div>
+                    <textarea id="serverIceOfferData" readonly="True"></textarea>
+                </div>
+                <div id="remoteIceOffer" class="input-box">
+                    <div class="label">Remote ICE Offer:</div>
+                    <textarea id="remoteIceOfferData"></textarea>
+                </div>
+            </div>
+            <div>
+                <div class="label">Remote Ice Candidates</div>
+                <textarea id="remoteIceCandidates"></textarea>
+                <div class="label">Local Ice Candidates</div>
+                <textarea id="localIceCandidates" readonly="true"></textarea>
+            </div>
+
+            <div id="buttons">
+                <select id="codec">
+                    <!-- Codec values are matched with how they appear in the SDP.
+            For instance, opus matches opus/48000/2 in Chrome, and ISAC/16000
+            matches 16K iSAC (but not 32K iSAC). -->
+                    <option value="opus">Opus</option>
+                    <option value="ISAC">iSAC 16K</option>
+                    <option value="G722">G722</option>
+                    <option value="PCMU">PCMU</option>
+                    <option value="red">RED</option>
+                </select>
+                <select id="codecPreferences" disabled>
+                    <option selected value="">Default</option>
+                </select>
+                <button id="hangupButton">Hang Up</button>
+                <button id="startServerButton">Start Server</button>
+                <button id="startClientButton">Start Client</button>
+                <button id="setRemoteButton">Set Remote</button>
+                <button id="setRemoteCandidatesButton">Set Remote Candidates</button>
+            </div>
+
+            <div id="audio">
+                <div>
+                    <div class="label">Remote audio:</div>
+                    <audio id="audio" autoplay controls></audio>
+                </div>
+            </div>
+        </div>
+
+        <div id="inputs">
+            <div class="graph-container" id="bitrateGraph">
+                <div class="label">Bitrate</div>
+                <canvas id="bitrateCanvas"></canvas>
+            </div>
+            <div class="graph-container" id="rttGraph">
+                <div class="label">RTT (ms)</div>
+                <canvas id="rttCanvas"></canvas>
+            </div>
+            <div class="graph-container" id="packetGraph">
+                <div class="label">Packets sent per second</div>
+                <canvas id="packetCanvas"></canvas>
+            </div>
+            <div class="graph-container" id="audioLevelGraph">
+                <div class="label">Average audio level ([0..1])</div>
+                <canvas id="audioLevelCanvas"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+    <script src="js/main.js"></script>
+    <script src="third_party/graph.js"></script>
+</body>
+
+</html>
