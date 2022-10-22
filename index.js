@@ -7,7 +7,7 @@ const xhub = require("express-x-hub");
 const app = express();
 var https = require("node:https");
 
-const PORT = 50001 || process.env.PORT || 8080;
+const PORT = process.env.PORT || 8080;
 
 app.use(xhub({ algorithm: "sha1", secret: process.env.APP_SECRET }));
 app.use(bodyParser.json());
@@ -109,39 +109,3 @@ app.post("/calling/invoke", function (req, res) {
 app.listen(PORT, function () {
   console.log("Starting webhooks server listening on port:" + PORT);
 });
-
-/*
-{
-    "object": "whatsapp_business_account",
-    "entry": [
-      {
-        "id": "101360329360829",
-        "changes": [
-          {
-            "value": {
-              "whatsapp_business_api_data": {
-                "display_phone_number": "12245557057",
-                "phone_number_id": "107700575382216",
-                "contacts": [
-                  {
-                    "wa_id": "12245557057"
-                  }
-                ],
-                "call": {
-                  "call_id": "TestCallId",
-                  "caller": "12245557057",
-                  "callee": "16506445143",
-                  "call_type": "AUDIO",
-                  "type": "call_connect",
-                  "event_timestamp": "1970-01-01T06:25:23+0000",
-                  "sdp": "some sdp info"
-                }
-              }
-            },
-            "field": "messages"
-          }
-        ]
-      }
-    ]
-  },
-  */
