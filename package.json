@@ -1,35 +1,34 @@
 {
-  "name": "node-js-getting-started",
-  "version": "0.3.0",
-  "description": "A sample Node.js app using Express 4",
-  "engines": {
-    "node": "16.x"
-  },
+  "name": "capi_calling_test",
+  "version": "1.0.0",
+  "description": "Simple test server to receive webhooks updates from Facebook",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "test": "node test.js"
-  },
-  "dependencies": {
-    "ejs": "^3.1.5",
-    "express": "^4.15.2",
-    "express-x-hub": "^1.0.4",
-    "request": "^2.74.0",
-    "body-parser": "^1.15.2",
-    "cors": "^2.8.5"
-  },
-  "devDependencies": {
-    "got": "^11.3.0",
-    "tape": "^4.7.0"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/heroku/node-js-getting-started"
+    "url": "git+https://github.com/mduppes/webhooks_test.git"
   },
   "keywords": [
-    "node",
-    "heroku",
-    "express"
+    "webhooks",
+    "facebook",
+    "test"
   ],
-  "license": "MIT"
+  "author": "Mark Duppenthaler",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/goheer/capi_calling_test"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "homepage": "https://github.com/goheer/capi_calling_test",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "express-x-hub": "^1.0.4",
+    "request": "^2.74.0",
+    "cors": "^2.8.5"
+  }
 }
