@@ -15,9 +15,8 @@
     "express": "^4.15.2",
     "express-x-hub": "^1.0.4",
     "request": "^2.74.0",
-    "redis": "^4.2.0",
-    "rsmq": "^0.12.4",
-    "body-parser": "^1.15.2"
+    "body-parser": "^1.15.2",
+    "cors": "^2.8.5"
   },
   "devDependencies": {
     "got": "^11.3.0",
