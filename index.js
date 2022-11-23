@@ -4,34 +4,27 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const request = require("request");
 const xhub = require("express-x-hub");
+const cors = require("cors");
 const app = express();
-var https = require("node:https");
 
 const PORT = process.env.PORT || 8080;
 
 app.use(xhub({ algorithm: "sha1", secret: process.env.APP_SECRET }));
 app.use(bodyParser.json());
-
-// Add static path for /calling path.
+app.use(cors({ origin: "*" }));
 app.use(express.static("public"));
 app.use(express.static("calling"));
 
 var received_updates = [];
-var calling_updates = [];
-
-function storeEvents(event) {
-  var json_string = JSON.stringify(event);
-  if (json_string.indexOf('"call"') > -1) {
-    var call_json = event["entry"][0]["changes"][0]["value"]["call"];
-
-    calling_updates.unshift(call_json);
-  } else {
-    received_updates.unshift(event);
-  }
-}
 
 app.get("/", function (req, res) {
-  res.send(JSON.stringify(received_updates, null, 2));
+  if (req.query.dequeue === "true") {
+    var updates = received_updates;
+    received_updates = [];
+    res.send(updates);
+  } else {
+    res.send(received_updates);
+  }
 });
 
 app.get("/webhooks", function (req, res) {
@@ -53,19 +46,10 @@ app.post("/webhooks", function (req, res) {
     return;
   }
   console.log(JSON.stringify(req.body, null, 2));
-  storeEvents(req.body);
+  received_updates.unshift(req.body);
   res.sendStatus(200);
 });
 
-app.get("/poll_calling_events", function (req, res) {
-  if (calling_updates.length > 0) {
-    let item = calling_updates[0];
-    calling_updates.shift();
-    res.send(item);
-    return;
-  }
-  res.send(null);
-});
 
 app.post("/calling/invoke", function (req, res) {
   console.log(`Calling invoke with: `, req.body);
