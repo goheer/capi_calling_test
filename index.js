@@ -22,10 +22,7 @@ var calling_updates = [];
 function storeEvents(event) {
   var json_string = JSON.stringify(event);
   if (json_string.indexOf('"call"') > -1) {
-    var call_json =
-      event["entry"][0]["changes"][0]["value"]["whatsapp_business_api_data"][
-        "call"
-      ];
+    var call_json = event["entry"][0]["changes"][0]["value"]["call"];
 
     calling_updates.unshift(call_json);
   } else {

@@ -1,20 +1,20 @@
 # capi_calling_test
 
-1/ Deploy to heroku
+Deploy to heroku
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
 A barebones Node.js app using [Express 4](http://expressjs.com/).
 
-This App supports CAPI Calling Test app. Open https://localhost/calling/ to see the WebApp in action.
+This App supports CAPI Calling Test app. Open https://localhost:50001/calling/ to see the WebApp in action.
 
 ## Running Locally
 
 Make sure you have [Node.js](http://nodejs.org/) and the [Heroku CLI](https://cli.heroku.com/) installed.
 
 ```sh
-$ git clone https://github.com/heroku/node-js-getting-started.git # or clone your own fork
-$ cd node-js-getting-started
+$ git clone https://github.com/goheer/capi_calling_test.git # or clone your own fork
+$ cd capi_calling_test
 $ npm install
 $ npm start
 ```
