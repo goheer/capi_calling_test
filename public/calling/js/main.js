@@ -761,7 +761,7 @@ async function makeGraphAPICall(action, payload) {
 }
 
 function pollWebhooks() {
-  fetch("https://capi-calling-demo-app.herokuapp.com/?dequeue=true", {
+  fetch("https://capi-calling-test.herokuapp.com/?dequeue=true", {
     method: "GET",
     cors: "no-cors",
   })
