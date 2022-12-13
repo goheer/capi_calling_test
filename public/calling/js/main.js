@@ -713,29 +713,22 @@ function handleWebhookCallTerminate(webhook) {
 function processWebhooks(payload) {
   console.log(`Processing webhooks: ${payload.length}`);
 
-  payload.forEach((webhook) => {
-    console.log(webhook);
-    if (webhook["object"] != "whatsapp_business_account") {
-      return;
+  payload.forEach((change) => {
+    console.log(change);
+
+    const call_payload = change["value"]["call"];
+
+    const webhook_type = call_payload["type"];
+    switch (webhook_type) {
+      case "call_connect":
+        handleWebhookCallConnect(call_payload);
+        break;
+      case "call_terminate":
+        handleWebhookCallTerminate(call_payload);
+        break;
+      default:
+        console.log(`Unhandled webhook_type: ${webhook_type}`);
     }
-
-    webhook["entry"].forEach((entry) => {
-      entry["changes"].forEach((change) => {
-        const call_payload = change["value"]["call"];
-
-        const webhook_type = call_payload["type"];
-        switch (webhook_type) {
-          case "call_connect":
-            handleWebhookCallConnect(call_payload);
-            break;
-          case "call_terminate":
-            handleWebhookCallTerminate(call_payload);
-            break;
-          default:
-            console.log(`Unhandled webhook_type: ${webhook_type}`);
-        }
-      });
-    });
   });
 }
 
@@ -761,7 +754,8 @@ async function makeGraphAPICall(action, payload) {
 }
 
 function pollWebhooks() {
-  fetch("https://capi-calling-test.herokuapp.com/?dequeue=true", {
+  const wamid = callIdData.value;
+  fetch("https://capi-calling-test.herokuapp.com/?wamid=" + wamid, {
     method: "GET",
     cors: "no-cors",
   })
@@ -772,7 +766,7 @@ function pollWebhooks() {
           processWebhooks(data);
         })
         .catch((e) => {
-          console.error("pollWebhooks json parsing error: ", e);
+          console.error("pollWebhooks json parsing error: ", e, data);
         });
     })
     .catch((e) => {
@@ -789,6 +783,9 @@ function make_call_button() {
       if (resp["error"] === undefined) {
         callIdData.value =
           resp["whatsapp_business_api_data"]["call"]["call_id"];
+
+          // Poll for webhooks
+          interval = setInterval(pollWebhooks, 1000);
       } else {
         hangup();
         alert("Error Starting New Call");
@@ -818,7 +815,6 @@ for (i = 0; i < coll.length; i++) {
 
 function onStartCall() {
   updateConnectionStatus("starting");
-  interval = setInterval(pollWebhooks, 1000);
 }
 
 function onEndCall() {}

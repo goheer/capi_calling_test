@@ -16,14 +16,52 @@ app.use(cors({ origin: "*" }));
 app.use(express.static("public"));
 app.use(express.static("calling"));
 
-var received_updates = [];
+var received_updates = {};
+
+function getWamidFromWebhook(change) {
+  console.log("getWamidFromWebhook from ");
+  console.log(change);
+
+  if ("value" in change) {
+    if ("call" in change.value) {
+      return change["value"]["call"];
+    }
+  }
+
+  return null;
+}
 
 app.get("/", function (req, res) {
   if (req.query.dequeue === "true") {
+    // if dequeue is set then dequeue everything
     var updates = received_updates;
-    received_updates = [];
+    received_updates = {};
     res.send(updates);
+
+  } else if (req.query.wamid !== undefined) {
+    // if user is asking for particular wamid then only return webhooks related to that
+    const wamid = req.query.wamid;
+    if (wamid in received_updates) {
+      const result = received_updates[wamid];
+      received_updates[wamid] = [];
+      res.send(result);
+    } else {
+      res.send([]);
+    }
+
+  } else if (req.query.wamid !== undefined) {
+    // if user is asking for particular wamid then only return webhooks related to that
+    const wamid = req.query.wamid;
+    if (wamid in received_updates) {
+      const result = received_updates[wamid];
+      received_updates[wamid] = [];
+      res.send(result);
+    } else {
+      res.send([]);
+    }
+
   } else {
+    // Otherwise dump all webhooks received so far
     res.send(received_updates);
   }
 });
@@ -46,11 +84,32 @@ app.post("/webhooks", function (req, res) {
     res.sendStatus(401);
     return;
   }
-  console.log(JSON.stringify(req.body, null, 2));
-  received_updates.unshift(req.body);
+
+  const payload = req.body;
+
+  // Log the webhook
+  console.log(JSON.stringify(payload, null, 2));
+
+  // Store the changes in the dict
+  payload.entry.forEach((entry) => {
+    entry.changes.forEach((change) => {
+      const wamid = change["value"]["call"]["call_id"];
+
+      console.log(`Got webhook for wamid: ${wamid}`);
+
+      if (wamid !== null) {
+        if (wamid in received_updates === false) {
+          received_updates[wamid] = [];
+        }
+        received_updates[wamid].unshift(change);
+      } else {
+        console.error(`Unable to get wamid from webhook ${entry}`);
+      }
+    });
+  });
+
   res.sendStatus(200);
 });
-
 
 app.post("/calling/invoke", function (req, res) {
   console.log(`Calling invoke with: `, req.body);
