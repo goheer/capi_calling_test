@@ -37,6 +37,9 @@ const remoteIceCandidatesData = document.querySelector(
 const localIceCandidatesData = document.querySelector(
   "textarea#localIceCandidates"
 );
+const localDescriptionData = document.querySelector(
+  "textarea#localDescriptionData"
+);
 
 const serverNameData = document.querySelector("input#serverNameData");
 const phoneNumberData = document.querySelector("input#phoneNumberData");
@@ -271,9 +274,9 @@ async function shared_setup() {
     }
 
     console.log("Updated LOCAL_DESCRIPTION: ", pc.localDescription);
-    // serverIceOfferData.value = JSON.stringify(
-    //   JSON.stringify(pc.localDescription)
-    // );
+    localDescriptionData.value = JSON.stringify(
+      JSON.stringify(pc.localDescription)
+    );
   };
 
   pc.onconnectionstatechange = (e) =>
@@ -714,7 +717,7 @@ function processWebhooks(payload) {
   console.log(`Processing webhooks: ${payload.length}`);
 
   payload.forEach((change) => {
-    console.log(change);
+    console.log(JSON.stringify(change));
 
     const call_payload = change["value"]["call"];
 
